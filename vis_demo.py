@@ -7,7 +7,7 @@ from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
                          process_mmdet_results, vis_pose_result)
 from mmpose.datasets import DatasetInfo
 
-from src.human_detection.mmpose_detection.mmpose_human_detector import MMPOSEHumanDetector
+from src.human_detection.mmpose_detection.mmpose_detector import MMPoseDetector
 
 try:
     from mmdet.apis import inference_detector, init_detector
@@ -23,10 +23,10 @@ def main():
     Using mmdet to detect the human.
     """
     parser = ArgumentParser()
-    parser.add_argument('det_config', help='Config file for detection')
-    parser.add_argument('det_checkpoint', help='Checkpoint file for detection')
     parser.add_argument('pose_config', help='Config file for pose')
     parser.add_argument('pose_checkpoint', help='Checkpoint file for pose')
+    parser.add_argument('--det_config', help='Config file for detection', default=None)
+    parser.add_argument('--det_checkpoint', help='Checkpoint file for detection', default=None)
     parser.add_argument('--img-root', type=str, default='', help='Image root')
     parser.add_argument('--img', type=str, default='', help='Image file')
     parser.add_argument(
@@ -50,10 +50,10 @@ def main():
 
     assert args.show or (args.out_img_root != '')
     assert args.img != ''
-    assert args.det_config is not None
-    assert args.det_checkpoint is not None
+    # assert args.det_config is not None
+    # assert args.det_checkpoint is not None
 
-    detector = MMPOSEHumanDetector(args.pose_config, args.pose_checkpoint, args.det_config, args.det_checkpoint, device=args.device)
+    detector = MMPoseDetector(args.pose_config, args.pose_checkpoint, args.det_config, args.det_checkpoint, device=args.device)
     detector.find_objects(args.img)
 
 

@@ -22,7 +22,7 @@ persons is conducted in the part-based framework. You  can read about this in ht
    5. To find current ckpt I use `mim search mmpose  --dataset coco-wholebody --sort face_ap` and take first config
    6. Run `mim download mmpose --config topdown_heatmap_hrnet_w48_coco_wholebody_384x288_dark_plus  --dest ckpt/`
    7. If you want to know which method you use. Find model type 'TopDown' or 'BottomUp' if configs.py files which was downloaded
-   8. Also we need a detection model which you can find by ` mim search mmdet  --dataset coco --config faster_rcnn_r50_fpn_1x_coco`
+   8. Also we need a detection model which you can find by ` mim search mmdet  --dataset coco --config faster_rcnn_r50_fpn_1x_coco`. I think coco dataset is the most important part, because in MMDetDetectionStrategy hardcoded class for persons. Also you can find by dataset where 'person' in CLASSES putted first 
    9. This corresponds to mmpos demo files from `https://github.com/open-mmlab/mmpose/blob/master/demo/docs/2d_wholebody_pose_demo.md`
    10. download by `mim download mmdet --config faster_rcnn_r50_fpn_1x_coco --dest ckpt/`
    11. Finaly Run `python vis_demo_top_down.py ckpt/faster_rcnn_r50_fpn_1x_coco.py ckpt/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth ckpt/topdown_heatmap_hrnet_w48_coco_wholebody_384x288_dark_plus.py  ckpt/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth  --img-root demo --img arcane.jpg  --show`

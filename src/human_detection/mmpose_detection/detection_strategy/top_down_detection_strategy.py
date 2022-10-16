@@ -1,27 +1,26 @@
-import warnings
 
-from mmdet.apis import inference_detector
-from mmpose.apis import process_mmdet_results, inference_top_down_pose_model, vis_pose_result
+import warnings
+from abc import abstractmethod
+
+from mmpose.apis import inference_top_down_pose_model
 from mmpose.datasets import DatasetInfo
 
 from src.human_detection.mmpose_detection.detection_strategy.detection_strategy import DetectionStrategy
 
 
 class TopDownDetectionStrategy(DetectionStrategy):
-    PERSON_CLASS_IDS = 1
 
-    def __init__(self, pose_model, det_model, bbox_thr=0.3, vis_results=False):
+    def __init__(self, pose_model, bbox_thr=None, vis_results=False):
         """
         TopDown model person detector
         :param pose_model: MMPose model to detect human keypoints
-        :param det_model: MMDetection model to detect human
-        :param bbox_thr: Bounding box score threshold, default 0.3
+        :param det_model: MMDetection model to detect human. If None will be used face detection lib
+        :param bbox_thr: Bounding box score threshold, default None if you want not to check
         :param vis_results: Visualize image
         """
         self.pose_model = pose_model
-        self.det_model = det_model
-        self.bbox_thr = bbox_thr
         self.vis_results = vis_results
+        self.bbox_thr = bbox_thr
 
         self.dataset = pose_model.cfg.data['test']['type']  # Deprecated
         self.dataset_info = pose_model.cfg.data['test'].get('dataset_info', None)
@@ -33,13 +32,13 @@ class TopDownDetectionStrategy(DetectionStrategy):
         else:
             self.dataset_info = DatasetInfo(self.dataset_info)
 
+    @abstractmethod
+    def detect_objects(self, image):
+        pass
 
     def process_image(self, image):
-        # test a single image, the resulting box is (x1, y1, x2, y2)
-        mmdet_results = inference_detector(self.det_model, image)
+        detection_results = self.detect_objects(image)
 
-        # keep the person class bounding boxes.
-        person_results = process_mmdet_results(mmdet_results, self.PERSON_CLASS_IDS)
 
         # optional
         return_heatmap = False
@@ -49,7 +48,7 @@ class TopDownDetectionStrategy(DetectionStrategy):
         pose_results, returned_outputs = inference_top_down_pose_model(
             self.pose_model,
             image,
-            person_results,
+            detection_results,
             bbox_thr=self.bbox_thr,
             format='xyxy',
             dataset=self.dataset,
@@ -58,4 +57,3 @@ class TopDownDetectionStrategy(DetectionStrategy):
             outputs=output_layer_names)
 
         return pose_results
-

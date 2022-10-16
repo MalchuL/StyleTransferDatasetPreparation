@@ -55,7 +55,7 @@ class ObjectsDetector(ABC):
         """
         Converts data from `get_detection_results` into returned data
         :param results: Output from `get_detection_results`
-        :return: dict, contains keys: ['face', 'body', ...]. in each value subdict witch keys: `bbox` key in xyxy format, `keypoints` in xy format.
+        :return: dict, contains keys i.e.: ['face', 'body', ...]. in each value subdict witch keys: `bbox` key in xyxy format, `keypoints` in xy format.
                  list of dicts if input was a list or tuple
         """
         pass
