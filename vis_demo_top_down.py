@@ -13,6 +13,8 @@ try:
 except (ImportError, ModuleNotFoundError):
     has_mmdet = False
 
+import logging
+logging.basicConfig(level=logging.INFO)
 
 def main():
     """Visualize the demo images.
