@@ -4,7 +4,7 @@ import warnings
 from argparse import ArgumentParser
 from src.human_detection.face_detection.face_detection import FaceOrPartsDetector
 from src.human_detection.mmpose_detection.human_detection.mmdet_detection import MMDetOrPartsDetector
-from src.human_detection.mmpose_detection.mmpose_detector import MMPoseDetector
+from src.human_detection.mmpose_detection.mmpose_keypoints_detector import MMPoseDetector
 
 try:
     from mmdet.apis import inference_detector, init_detector
