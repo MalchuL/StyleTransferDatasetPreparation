@@ -2,13 +2,8 @@
 import os
 import warnings
 from argparse import ArgumentParser
-
-from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
-                         process_mmdet_results, vis_pose_result)
-from mmpose.datasets import DatasetInfo
-
-from src.human_detection.mmpose_detection.human_detection.faces_detection_strategy import FaceDetector
-from src.human_detection.mmpose_detection.human_detection.mmdet_detection_strategy import MMDetDetector
+from src.human_detection.mmpose_detection.human_detection.face_detection import FaceDetector
+from src.human_detection.mmpose_detection.human_detection.mmdet_detection import MMDetDetector
 from src.human_detection.mmpose_detection.mmpose_detector import MMPoseDetector
 
 try:
