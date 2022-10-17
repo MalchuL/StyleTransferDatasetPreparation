@@ -6,13 +6,13 @@ from typing import Union
 from mmpose.apis import inference_top_down_pose_model
 from mmpose.datasets import DatasetInfo
 
-from src.human_detection.mmpose_detection.human_detection.human_detector import HumanDetector
+from src.human_detection.human_parts_detector import HumanOrPartsDetector
 from src.human_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
 
 
 class TopDownEstimatorStrategy(PoseEstimatorStrategy):
 
-    def __init__(self, pose_model, human_detector: HumanDetector, vis_results=False):
+    def __init__(self, pose_model, human_detector: HumanOrPartsDetector, vis_results=False):
         """
         TopDown model person detector
         :param pose_model: MMPose model to detect human keypoints

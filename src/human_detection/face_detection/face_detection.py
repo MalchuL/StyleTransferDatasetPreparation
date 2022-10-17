@@ -3,7 +3,7 @@ import pathlib
 import cv2
 import face_recognition
 
-from src.human_detection.mmpose_detection.human_detection.human_detector import HumanDetector
+from src.human_detection.human_parts_detector import HumanOrPartsDetector
 
 
 def process_face_det_results(face_det_results):
@@ -22,7 +22,7 @@ def process_face_det_results(face_det_results):
     return person_results
 
 
-class FaceDetector(HumanDetector):
+class FaceOrPartsDetector(HumanOrPartsDetector):
 
     def __init__(self):
         """

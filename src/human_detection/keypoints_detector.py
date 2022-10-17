@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 
 
-class ObjectsDetector(ABC):
+class KeypointsDetector(ABC):
     def __init__(self, channel_order='rbg'):
         """
         Objects detector module

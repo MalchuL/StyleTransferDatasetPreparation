@@ -2,10 +2,10 @@ import cv2
 from mmdet.apis import inference_detector, init_detector
 from mmpose.apis import process_mmdet_results
 
-from src.human_detection.mmpose_detection.human_detection.human_detector import HumanDetector
+from src.human_detection.human_parts_detector import HumanOrPartsDetector
 
 
-class MMDetDetector(HumanDetector):
+class MMDetOrPartsDetector(HumanOrPartsDetector):
     PERSON_CLASS_IDS = 1
 
     def __init__(self, det_config=None, det_checkpoint=None, device='cpu', bbox_thr=0.3):

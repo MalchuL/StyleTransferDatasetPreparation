@@ -2,8 +2,8 @@
 import os
 import warnings
 from argparse import ArgumentParser
-from src.human_detection.mmpose_detection.human_detection.face_detection import FaceDetector
-from src.human_detection.mmpose_detection.human_detection.mmdet_detection import MMDetDetector
+from src.human_detection.face_detection.face_detection import FaceOrPartsDetector
+from src.human_detection.mmpose_detection.human_detection.mmdet_detection import MMDetOrPartsDetector
 from src.human_detection.mmpose_detection.mmpose_detector import MMPoseDetector
 
 try:
@@ -52,10 +52,10 @@ def main():
 
     if args.det_config is None or args.det_checkpoint is None:
         warnings.warn("No detection model was selected, used face detector")
-        detector = FaceDetector()
+        detector = FaceOrPartsDetector()
     else:
         assert args.det_config is not None and args.det_checkpoint is not None
-        detector = MMDetDetector(det_config=args.det_config, det_checkpoint=args.det_checkpoint, device=args.device)
+        detector = MMDetOrPartsDetector(det_config=args.det_config, det_checkpoint=args.det_checkpoint, device=args.device)
 
 
     detector = MMPoseDetector(args.pose_config, args.pose_checkpoint, detector, device=args.device)

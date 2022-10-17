@@ -1,0 +1,1 @@
+python vis_demo.py  ckpt/topdown_heatmap_hrnet_w48_coco_wholebody_384x288_dark_plus.py ckpt/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth   --img "demo/arcane.jpg" --det_config=ckpt/faster_rcnn_r50_fpn_1x_coco.py --det_checkpoint=ckpt/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth --show --device=cuda

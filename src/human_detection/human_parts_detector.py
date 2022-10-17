@@ -1,7 +1,7 @@
 from abc import abstractmethod, ABC
 
 
-class HumanDetector(ABC):
+class HumanOrPartsDetector(ABC):
 
     def __init__(self, bbox_thr=None, color_order='bgr'):
         """
