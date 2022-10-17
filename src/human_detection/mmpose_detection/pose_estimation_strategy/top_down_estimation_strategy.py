@@ -1,26 +1,27 @@
 
 import warnings
 from abc import abstractmethod
+from typing import Union
 
 from mmpose.apis import inference_top_down_pose_model
 from mmpose.datasets import DatasetInfo
 
-from src.human_detection.mmpose_detection.detection_strategy.detection_strategy import DetectionStrategy
+from src.human_detection.mmpose_detection.human_detection.human_detector import HumanDetector
+from src.human_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
 
 
-class TopDownDetectionStrategy(DetectionStrategy):
+class TopDownEstimatorStrategy(PoseEstimatorStrategy):
 
-    def __init__(self, pose_model, bbox_thr=None, vis_results=False):
+    def __init__(self, pose_model, human_detector: HumanDetector, vis_results=False):
         """
         TopDown model person detector
         :param pose_model: MMPose model to detect human keypoints
-        :param det_model: MMDetection model to detect human. If None will be used face detection lib
         :param bbox_thr: Bounding box score threshold, default None if you want not to check
         :param vis_results: Visualize image
         """
+        super().__init__()
         self.pose_model = pose_model
         self.vis_results = vis_results
-        self.bbox_thr = bbox_thr
 
         self.dataset = pose_model.cfg.data['test']['type']  # Deprecated
         self.dataset_info = pose_model.cfg.data['test'].get('dataset_info', None)
@@ -31,10 +32,11 @@ class TopDownDetectionStrategy(DetectionStrategy):
                 DeprecationWarning)
         else:
             self.dataset_info = DatasetInfo(self.dataset_info)
+        self.detector = human_detector
+        self.bbox_thr = self.detector.bbox_thr
 
-    @abstractmethod
     def detect_objects(self, image):
-        pass
+        return self.detector.detect_objects(image)
 
     def process_image(self, image):
         detection_results = self.detect_objects(image)

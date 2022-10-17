@@ -4,45 +4,36 @@ import numpy as np
 from mmdet.apis import init_detector
 from mmpose.apis import init_pose_model, vis_pose_result
 
-from src.human_detection.mmpose_detection.detection_strategy.faces_detection_strategy import FacesDetectionStrategy
-from src.human_detection.mmpose_detection.detection_strategy.mmdet_detection_strategy import MMDetDetectionStrategy
-from src.human_detection.mmpose_detection.detection_strategy.top_down_detection_strategy import TopDownDetectionStrategy
+from src.human_detection.mmpose_detection.human_detection.human_detector import HumanDetector
 from src.human_detection.mmpose_detection.keypoints_utils.keypoints_set import KeypointsSet
 from src.human_detection.mmpose_detection.model_type import PoseModelType
 from src.human_detection.mmpose_detection.model_type_resolver import get_model_type
+from src.human_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
+from src.human_detection.mmpose_detection.pose_estimation_strategy.top_down_estimation_strategy import \
+    TopDownEstimatorStrategy
 from src.human_detection.objects_detector import ObjectsDetector
 
 
 class MMPoseDetector(ObjectsDetector):
-
     # Vis constants
     THICKNESS = 1  # Link thickness for visualization
     RADIUS = 4  # Keypoint radius for visualization
     KPS_THR = 0.3  # Keypoint score threshold
     BBOX_THR = 0.3  # Keypoint score threshold
 
-    def __init__(self, pose_config, pose_checkpoint, det_config=None, det_checkpoint=None, device='cpu', bbox_thr=0.3):
-        super().__init__(channel_order='bgr')  # Because MM modules recieve BGR image
+    def __init__(self, pose_config, pose_checkpoint, detector: HumanDetector, device='cpu', bbox_thr=0.3):
+        super().__init__(channel_order='rgb')  # Because MMPose modules recieve RGB image
         self.pose_model = init_pose_model(
             pose_config, pose_checkpoint, device=device.lower())
         pose_model_type = get_model_type(pose_config)
         self.det_model = None
 
         if pose_model_type == PoseModelType.TOP_DOWN:
-            if det_config is None or det_checkpoint is None:
-                warnings.warn("No detection model was selected, used face detector")
-                self.mmpose_detection_strategy = FacesDetectionStrategy(pose_model=self.pose_model)
-            else:
-                self.det_model = init_detector(
-                    det_config, det_checkpoint, device=device.lower())
-                self.det_model = None
-                self.mmpose_detection_strategy = MMDetDetectionStrategy(self.pose_model, self.det_model,
-                                                                      bbox_thr=bbox_thr)
+            self.mmpose_detection_strategy: PoseEstimatorStrategy = TopDownEstimatorStrategy(self.pose_model, detector)
         else:
             raise ValueError(f'This model type {pose_model_type} is not supported')
 
         self.keypoints_set = KeypointsSet(self.pose_model.cfg.dataset_info.keypoint_info)
-
 
     def get_detection_results(self, img):
         return self.mmpose_detection_strategy.process_image(img)

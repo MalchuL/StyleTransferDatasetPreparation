@@ -7,6 +7,8 @@ from mmpose.apis import (inference_top_down_pose_model, init_pose_model,
                          process_mmdet_results, vis_pose_result)
 from mmpose.datasets import DatasetInfo
 
+from src.human_detection.mmpose_detection.human_detection.faces_detection_strategy import FaceDetector
+from src.human_detection.mmpose_detection.human_detection.mmdet_detection_strategy import MMDetDetector
 from src.human_detection.mmpose_detection.mmpose_detector import MMPoseDetector
 
 try:
@@ -53,7 +55,15 @@ def main():
     # assert args.det_config is not None
     # assert args.det_checkpoint is not None
 
-    detector = MMPoseDetector(args.pose_config, args.pose_checkpoint, args.det_config, args.det_checkpoint, device=args.device)
+    if args.det_config is None or args.det_checkpoint is None:
+        warnings.warn("No detection model was selected, used face detector")
+        detector = FaceDetector()
+    else:
+        assert args.det_config is not None and args.det_checkpoint is not None
+        detector = MMDetDetector(det_config=args.det_config, det_checkpoint=args.det_checkpoint, device=args.device)
+
+
+    detector = MMPoseDetector(args.pose_config, args.pose_checkpoint, detector, device=args.device)
     detector.find_objects(args.img)
 
 

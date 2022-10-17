@@ -2,7 +2,8 @@ import pathlib
 
 import cv2
 import face_recognition
-from src.human_detection.mmpose_detection.detection_strategy.top_down_detection_strategy import TopDownDetectionStrategy
+
+from src.human_detection.mmpose_detection.human_detection.human_detector import HumanDetector
 
 
 def process_face_det_results(face_det_results):
@@ -21,9 +22,9 @@ def process_face_det_results(face_det_results):
     return person_results
 
 
-class FacesDetectionStrategy(TopDownDetectionStrategy):
+class FaceDetector(HumanDetector):
 
-    def __init__(self, pose_model, vis_results=False):
+    def __init__(self):
         """
         TopDown model person detector
         :param pose_model: MMPose model to detect human keypoints
@@ -31,14 +32,14 @@ class FacesDetectionStrategy(TopDownDetectionStrategy):
         :param bbox_thr: Bounding box score threshold, default 0.3
         :param vis_results: Visualize image
         """
-        super().__init__(pose_model, bbox_thr=None, vis_results=vis_results)
+        super().__init__(bbox_thr=None, color_order='rgb')
 
     def detect_objects(self, image):
         if isinstance(image, (str, pathlib.Path)):
             image_rgb = face_recognition.load_image_file(image)
             face_det_results = face_recognition.face_locations(image_rgb)
         else:
-            face_det_results = face_recognition.face_locations(cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+            face_det_results = face_recognition.face_locations(image)
 
         # keep the person class bounding boxes.
         detection_results = process_face_det_results(face_det_results)
