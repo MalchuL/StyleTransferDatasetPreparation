@@ -25,4 +25,5 @@ persons is conducted in the part-based framework. You  can read about this in ht
    8. Also we need a detection model which you can find by ` mim search mmdet  --dataset coco --config faster_rcnn_r50_fpn_1x_coco`. I think coco dataset is the most important part, because in MMDetDetectionStrategy hardcoded class for persons. Also you can find by dataset where 'person' in CLASSES putted first 
    9. This corresponds to mmpos demo files from `https://github.com/open-mmlab/mmpose/blob/master/demo/docs/2d_wholebody_pose_demo.md`
    10. download by `mim download mmdet --config faster_rcnn_r50_fpn_1x_coco --dest ckpt/`
+   11. And download by `mim download mmpose --config topdown_heatmap_hrnetv2_w18_300w_256x256  --dest ckpt/` to use only face model
    11. Finaly Run `python vis_demo_top_down.py ckpt/faster_rcnn_r50_fpn_1x_coco.py ckpt/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth ckpt/topdown_heatmap_hrnet_w48_coco_wholebody_384x288_dark_plus.py  ckpt/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth  --img-root demo --img arcane.jpg  --show`

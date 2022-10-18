@@ -8,6 +8,7 @@ import cv2
 from src.human_detection.face_detection.face_detection import FaceDetector
 from src.human_detection.mmpose_detection.human_detection.mmdet_detection import MMDetHumanDetector
 from src.human_detection.mmpose_detection.mmpose_keypoints_detector import MMPoseDetector
+from src.pipeline.face_dumper_pipeline import FaceDumperPipeline
 
 try:
     from mmdet.apis import inference_detector, init_detector
@@ -28,45 +29,26 @@ def main():
     parser.add_argument('--det_config', help='Config file for detection', default=None)
     parser.add_argument('--det_checkpoint', help='Checkpoint file for detection', default=None)
     parser.add_argument('--img-root', type=str, default='', help='Image root')
-    parser.add_argument('--img', type=str, default='', help='Image file')
-    parser.add_argument(
-        '--show',
-        action='store_true',
-        default=False,
-        help='whether to show img')
     parser.add_argument(
         '--out-img-root',
         type=str,
-        default='',
+        default='dumped_images',
         help='root of the output img file. '
         'Default not saving the visualization images.')
     parser.add_argument(
         '--device', default='cuda:0', help='Device used for inference')
-    parser.add_argument(
-        '--visualize', action='store_true',
-        default=False, help='Visualize detection results')
 
-
-    assert has_mmdet, 'Please install mmdet to run the demo.'
 
     args = parser.parse_args()
 
-    assert args.show or (args.out_img_root != '')
-    assert args.img != ''
-    # assert args.det_config is not None
-    # assert args.det_checkpoint is not None
+    face_dumper = FaceDumperPipeline(det_config=args.det_config,
+                       det_ckpt=args.det_checkpoint,
+                       pose_config=args.pose_config,
+                       pose_ckpt=args.pose_checkpoint,
+                       output_size=256,
+                       device=args.device)
 
-    if args.det_config is None or args.det_checkpoint is None:
-        warnings.warn("No detection model was selected, used face detector")
-        detector = FaceDetector()
-    else:
-        assert args.det_config is not None and args.det_checkpoint is not None
-        detector = MMDetHumanDetector(det_config=args.det_config, det_checkpoint=args.det_checkpoint, device=args.device)
-
-    img = cv2.imread(args.img)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    detector = MMPoseDetector(args.pose_config, args.pose_checkpoint, detector, device=args.device, visualize=args.visualize)
-    detector.find_objects(img)
+    face_dumper.dump_faces(args.img_root, args.out_img_root)
 
 
 if __name__ == '__main__':

@@ -15,7 +15,12 @@ class KeypointsDetector(ABC):
         self.channel_order = channel_order
 
     def find_objects(self, path_or_image=Union[str, pathlib.Path, np.ndarray, list, tuple]):
-
+        """
+               Finds keypoints and bboxes for image
+               :param path_or_image: Path to image or image in np.ndarray readed by opencv in RGB format
+               :return: dict, contains keys i.e.: ['face', 'body', ...]. in each value subdict witch keys: `bbox` key in xyxy format, `keypoints` in xy format.
+                        list of dicts if input was a list or tuple
+               """
         img = self.preprocess_input(path_or_image)
         results = self.get_detection_results(img)
         results = self.postprocess(img, results)
@@ -31,6 +36,8 @@ class KeypointsDetector(ABC):
                 path = str(path_or_image)
                 img = self.convert_path_to_image(path)
             else:
+                if self.channel_order == 'bgr':
+                    path_or_image = cv2.cvtColor(path_or_image, cv2.COLOR_RGB2BGR)
                 img = path_or_image
         return img
 

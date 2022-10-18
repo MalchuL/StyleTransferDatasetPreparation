@@ -1,0 +1,4 @@
+# Found by ``
+# Donwload by `mim download mmpose --config topdown_heatmap_hrnetv2_w18_300w_256x256  --dest ckpt/`
+pose_config: ckpt/topdown_heatmap_hrnetv2_w18_300w_256x256.py
+pose_ckpt: ckpt/hrnetv2_w18_300w_256x256-eea53406_20211019.pth

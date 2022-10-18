@@ -22,7 +22,7 @@ def process_face_det_results(face_det_results):
     return person_results
 
 
-class FaceOrPartsDetector(HumanOrPartsDetector):
+class FaceDetector(HumanOrPartsDetector):
 
     def __init__(self):
         """

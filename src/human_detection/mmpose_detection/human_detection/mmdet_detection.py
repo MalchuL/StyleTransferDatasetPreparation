@@ -5,7 +5,7 @@ from mmpose.apis import process_mmdet_results
 from src.human_detection.human_parts_detector import HumanOrPartsDetector
 
 
-class MMDetOrPartsDetector(HumanOrPartsDetector):
+class MMDetHumanDetector(HumanOrPartsDetector):
     PERSON_CLASS_IDS = 1
 
     def __init__(self, det_config=None, det_checkpoint=None, device='cpu', bbox_thr=0.3):

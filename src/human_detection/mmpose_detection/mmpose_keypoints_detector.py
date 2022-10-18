@@ -18,8 +18,9 @@ class MMPoseDetector(KeypointsDetector):
     KPS_THR = 0.3  # Keypoint score threshold
     BBOX_THR = 0.3  # Keypoint score threshold
 
-    def __init__(self, pose_config, pose_checkpoint, detector: HumanOrPartsDetector, device='cpu', bbox_thr=0.3):
+    def __init__(self, pose_config, pose_checkpoint, detector: HumanOrPartsDetector, device='cpu', visualize=False):
         super().__init__(channel_order='rgb')  # Because MMPose modules recieve RGB image
+        self.visualize = visualize
         self.pose_model = init_pose_model(
             pose_config, pose_checkpoint, device=device.lower())
         pose_model_type = get_model_type(pose_config)
@@ -41,41 +42,41 @@ class MMPoseDetector(KeypointsDetector):
             assert 'bbox' in result
             assert 'keypoints' in result
             bbox = result['bbox']
-            keypoints = result['keypoints'][self.keypoints_set.group_ids['face']]
+            keypoints = {}
+            for name, ids in self.keypoints_set.group_ids.items():
+                keypoints[name] = result['keypoints'][ids]
             postprocessed_result = {'bbox': bbox, 'keypoints': keypoints}
             postprocessed_results.append(postprocessed_result)
 
-        palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102],
-                            [230, 230, 0], [255, 153, 255], [153, 204, 255],
-                            [255, 102, 255], [255, 51, 255], [102, 178, 255],
-                            [51, 153, 255], [255, 153, 153], [255, 102, 102],
-                            [255, 51, 51], [153, 255, 153], [102, 255, 102],
-                            [51, 255, 51], [0, 255, 0], [0, 0, 255],
-                            [255, 0, 0], [255, 255, 255]])
+        if self.visualize:
+            tmp_results = []
+            for result in postprocessed_results:
+                tmp_results.append({'bbox': result['bbox'],
+                                    'keypoints': np.concatenate([result['keypoints']['face'],
+                                                                 np.ones([len(result['keypoints']['face']), 1])],
+                                                                axis=1)})
+            palette = np.array([[255, 128, 0], [255, 153, 51], [255, 178, 102],
+                                [230, 230, 0], [255, 153, 255], [153, 204, 255],
+                                [255, 102, 255], [255, 51, 255], [102, 178, 255],
+                                [51, 153, 255], [255, 153, 153], [255, 102, 102],
+                                [255, 51, 51], [153, 255, 153], [102, 255, 102],
+                                [51, 255, 51], [0, 255, 0], [0, 0, 255],
+                                [255, 0, 0], [255, 255, 255]])
 
-        pose_kpt_color = palette[[19] * 68]
-        pose_link_color = palette[[]]
-        self.pose_model.show_result(
-            img,
-            postprocessed_results,
-            skeleton=None,
-            radius=self.RADIUS,
-            thickness=self.THICKNESS,
-            pose_kpt_color=pose_kpt_color,
-            pose_link_color=pose_link_color,
-            kpt_score_thr=0.3,
-            bbox_color='green',
-            show=True,
-            out_file=None)
-        #
-        # vis_pose_result(
-        #     self.pose_model,
-        #     img,
-        #     results,
-        #     dataset=self.mmpose_detection_strategy.dataset,
-        #     dataset_info=self.mmpose_detection_strategy.dataset_info,
-        #     kpt_score_thr=self.KPS_THR,
-        #     radius=self.RADIUS,
-        #     thickness=self.THICKNESS,
-        #     show=True,
-        #     out_file=None)
+            pose_kpt_color = palette[[19] * 68]
+            pose_link_color = palette[[]]
+            self.pose_model.show_result(
+                img,
+                tmp_results,
+                skeleton=None,
+                radius=self.RADIUS,
+                thickness=self.THICKNESS,
+                pose_kpt_color=pose_kpt_color,
+                pose_link_color=pose_link_color,
+                kpt_score_thr=0.3,
+                bbox_color='green',
+                show=True,
+                out_file=None)
+
+
+        return img, postprocessed_results

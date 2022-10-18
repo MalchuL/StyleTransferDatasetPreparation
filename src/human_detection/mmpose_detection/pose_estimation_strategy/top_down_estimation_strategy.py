@@ -33,7 +33,6 @@ class TopDownEstimatorStrategy(PoseEstimatorStrategy):
         else:
             self.dataset_info = DatasetInfo(self.dataset_info)
         self.detector = human_detector
-        self.bbox_thr = self.detector.bbox_thr
 
     def detect_objects(self, image):
         return self.detector.detect_objects(image)
@@ -51,11 +50,13 @@ class TopDownEstimatorStrategy(PoseEstimatorStrategy):
             self.pose_model,
             image,
             detection_results,
-            bbox_thr=self.bbox_thr,
+            bbox_thr=self.detector.bbox_thr,
             format='xyxy',
             dataset=self.dataset,
             dataset_info=self.dataset_info,
             return_heatmap=return_heatmap,
             outputs=output_layer_names)
 
+        for kps_dict in pose_results:
+            kps_dict['keypoints'] = kps_dict['keypoints'][:, :-1]
         return pose_results
