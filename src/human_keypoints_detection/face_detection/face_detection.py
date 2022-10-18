@@ -3,7 +3,7 @@ import pathlib
 import cv2
 import face_recognition
 
-from src.human_detection.human_parts_detector import HumanOrPartsDetector
+from src.human_keypoints_detection.human_parts_detector import HumanOrPartsDetector
 
 
 def process_face_det_results(face_det_results):

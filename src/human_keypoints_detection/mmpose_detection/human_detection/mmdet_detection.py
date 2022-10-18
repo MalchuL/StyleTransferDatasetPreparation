@@ -2,7 +2,7 @@ import cv2
 from mmdet.apis import inference_detector, init_detector
 from mmpose.apis import process_mmdet_results
 
-from src.human_detection.human_parts_detector import HumanOrPartsDetector
+from src.human_keypoints_detection.human_parts_detector import HumanOrPartsDetector
 
 
 class MMDetHumanDetector(HumanOrPartsDetector):

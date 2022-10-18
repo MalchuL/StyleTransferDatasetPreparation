@@ -1,4 +1,4 @@
-from src.human_detection.mmpose_detection.keypoints_utils.keypoints_set import KeypointsSet
+from src.human_keypoints_detection.mmpose_detection.keypoints_utils.keypoints_set import KeypointsSet
 
 
 def test_set():

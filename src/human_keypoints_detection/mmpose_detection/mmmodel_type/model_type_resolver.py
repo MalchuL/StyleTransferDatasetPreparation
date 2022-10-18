@@ -2,7 +2,7 @@ import logging
 
 import mmcv
 
-from src.human_detection.mmpose_detection.mmmodel_type.model_type import PoseModelType
+from src.human_keypoints_detection.mmpose_detection.mmmodel_type.model_type import PoseModelType
 
 logger = logging.getLogger(__name__)
 

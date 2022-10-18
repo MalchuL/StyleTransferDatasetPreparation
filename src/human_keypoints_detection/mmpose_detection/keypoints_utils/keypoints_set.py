@@ -1,4 +1,4 @@
-from src.human_detection.mmpose_detection.keypoints_utils.keypoints_groups import KPS_GROUPS
+from src.human_keypoints_detection.mmpose_detection.keypoints_utils.keypoints_groups import KPS_GROUPS
 
 
 class KeypointsSet:

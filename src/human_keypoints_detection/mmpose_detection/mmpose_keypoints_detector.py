@@ -1,14 +1,14 @@
 import numpy as np
 from mmpose.apis import init_pose_model
 
-from src.human_detection.human_parts_detector import HumanOrPartsDetector
-from src.human_detection.mmpose_detection.keypoints_utils.keypoints_set import KeypointsSet
-from src.human_detection.mmpose_detection.mmmodel_type.model_type import PoseModelType
-from src.human_detection.mmpose_detection.mmmodel_type.model_type_resolver import get_model_type
-from src.human_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
-from src.human_detection.mmpose_detection.pose_estimation_strategy.top_down_estimation_strategy import \
+from src.human_keypoints_detection.human_parts_detector import HumanOrPartsDetector
+from src.human_keypoints_detection.mmpose_detection.keypoints_utils.keypoints_set import KeypointsSet
+from src.human_keypoints_detection.mmpose_detection.mmmodel_type.model_type import PoseModelType
+from src.human_keypoints_detection.mmpose_detection.mmmodel_type.model_type_resolver import get_model_type
+from src.human_keypoints_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
+from src.human_keypoints_detection.mmpose_detection.pose_estimation_strategy.top_down_estimation_strategy import \
     TopDownEstimatorStrategy
-from src.human_detection.keypoints_detector import KeypointsDetector
+from src.human_keypoints_detection.keypoints_detector import KeypointsDetector
 
 
 class MMPoseDetector(KeypointsDetector):

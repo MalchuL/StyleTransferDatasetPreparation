@@ -6,8 +6,8 @@ from typing import Union
 from mmpose.apis import inference_top_down_pose_model
 from mmpose.datasets import DatasetInfo
 
-from src.human_detection.human_parts_detector import HumanOrPartsDetector
-from src.human_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
+from src.human_keypoints_detection.human_parts_detector import HumanOrPartsDetector
+from src.human_keypoints_detection.mmpose_detection.pose_estimation_strategy.pose_estimator_strategy import PoseEstimatorStrategy
 
 
 class TopDownEstimatorStrategy(PoseEstimatorStrategy):
