@@ -33,5 +33,5 @@ class FaceDumperPipeline:
                 out_img = self.aligner.align(img, four_point)
                 out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
                 file_path, extension = os.path.splitext(str(out_path))
-                file_path = file_path + f'_{crop_id:2d}' + extension
+                file_path = file_path + f'_{crop_id:02d}' + extension
                 cv2.imwrite(file_path, out_img)
