@@ -58,5 +58,6 @@ class TopDownEstimatorStrategy(PoseEstimatorStrategy):
             outputs=output_layer_names)
 
         for kps_dict in pose_results:
+            kps_dict['kps_probs'] = kps_dict['keypoints'][:, -1]
             kps_dict['keypoints'] = kps_dict['keypoints'][:, :-1]
         return pose_results

@@ -26,6 +26,16 @@ def iterate_with_structure(in_folder, out_folder, supported_extensions=IMG_EXTEN
 
         yield (file_path, new_path)
 
+
+def iterate_recursively(in_folder, supported_extensions=IMG_EXTENSIONS):
+    in_folder = Path(in_folder)
+    files = []
+    for pattern in supported_extensions:
+        files.extend(in_folder.rglob(pattern='*' + pattern))
+
+    for file_path in files:
+        yield file_path
+
 if __name__ == '__main__':
     for (in_path, out_path) in iterate_with_structure('/home/malchul/Documents', 'out_fld'):
         print(in_path, out_path)

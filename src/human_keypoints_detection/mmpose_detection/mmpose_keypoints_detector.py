@@ -43,9 +43,11 @@ class MMPoseDetector(KeypointsDetector):
             assert 'keypoints' in result
             bbox = result['bbox']
             keypoints = {}
+            kps_probs = {}
             for name, ids in self.keypoints_set.group_ids.items():
                 keypoints[name] = result['keypoints'][ids]
-            postprocessed_result = {'bbox': bbox, 'keypoints': keypoints}
+                kps_probs[name] = np.median(result['kps_probs'][ids])
+            postprocessed_result = {'bbox': bbox, 'keypoints': keypoints, 'kps_probs': kps_probs}
             postprocessed_results.append(postprocessed_result)
 
         if self.visualize:

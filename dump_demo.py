@@ -8,7 +8,8 @@ import cv2
 from src.human_keypoints_detection.face_detection.face_detection import FaceDetector
 from src.human_keypoints_detection.mmpose_detection.human_detection.mmdet_detection import MMDetHumanDetector
 from src.human_keypoints_detection.mmpose_detection.mmpose_keypoints_detector import MMPoseDetector
-from src.pipeline.face_dumper_pipeline import FaceDumperPipeline
+from src.pipeline.face_dumper_pipeline_face_rec import FaceDumperPipeline
+from src.pipeline.mmdet_face_dumper_pipeline import MMDetFaceDumperPipeline
 
 try:
     from mmdet.apis import inference_detector, init_detector
@@ -40,13 +41,18 @@ def main():
 
 
     args = parser.parse_args()
-
-    face_dumper = FaceDumperPipeline(det_config=args.det_config,
-                       det_ckpt=args.det_checkpoint,
-                       pose_config=args.pose_config,
-                       pose_ckpt=args.pose_checkpoint,
-                       output_size=256,
-                       device=args.device)
+    if args.det_config is None:
+        face_dumper = FaceDumperPipeline(pose_config=args.pose_config,
+                                          pose_ckpt=args.pose_checkpoint,
+                                          output_size=256,
+                                          device=args.device)
+    else:
+        face_dumper = MMDetFaceDumperPipeline(det_config=args.det_config,
+                                              det_ckpt=args.det_checkpoint,
+                                              pose_config=args.pose_config,
+                                              pose_ckpt=args.pose_checkpoint,
+                                              output_size=256,
+                                              device=args.device)
 
     face_dumper.dump_faces(args.img_root, args.out_img_root)
 
