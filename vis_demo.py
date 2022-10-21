@@ -1,12 +1,11 @@
 # Copyright (c) OpenMMLab. All rights reserved.
-import os
 import warnings
 from argparse import ArgumentParser
 
 import cv2
 
-from src.human_keypoints_detection.face_detection.face_detection import FaceDetector
-from src.human_keypoints_detection.mmpose_detection.human_detection.mmdet_detection import MMDetHumanDetector
+from src.human_keypoints_detection.parts_detection.face_detection import FaceDetector
+from src.human_keypoints_detection.parts_detection.mmdet_detection import MMDetHumanDetector
 from src.human_keypoints_detection.mmpose_detection.mmpose_keypoints_detector import MMPoseDetector
 
 try:
