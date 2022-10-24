@@ -47,7 +47,14 @@ class MMPoseDetector(KeypointsDetector):
             for name, ids in self.keypoints_set.group_ids.items():
                 keypoints[name] = result['keypoints'][ids]
                 kps_probs[name] = np.median(result['kps_probs'][ids])
-            postprocessed_result = {'bbox': bbox, 'keypoints': keypoints, 'kps_probs': kps_probs}
+            if len(bbox) == 4:
+                bbox_prob = 1.0
+            elif len(bbox) == 5:
+                bbox_prob = bbox[-1]
+                bbox = bbox[:-1]
+            else:
+                raise NotImplementedError('Detector should return 4 or 5 elements')
+            postprocessed_result = {'bbox': bbox, 'bbox_prob': bbox_prob, 'keypoints': keypoints, 'kps_probs': kps_probs}
             postprocessed_results.append(postprocessed_result)
 
         if self.visualize:

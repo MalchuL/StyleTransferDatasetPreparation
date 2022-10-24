@@ -9,3 +9,5 @@ det_ckpt:   ckpt/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth
 
 pose_config: ckpt/topdown_heatmap_hrnet_w48_coco_wholebody_384x288_dark_plus.py
 pose_ckpt:   ckpt/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth
+
+kps: 68

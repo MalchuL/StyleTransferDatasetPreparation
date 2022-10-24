@@ -6,16 +6,16 @@ from tqdm import tqdm
 
 from src.human_keypoints_detection.mmpose_detection.mmpose_keypoints_detector import MMPoseDetector
 from src.keypoint_alignment.aligners.ffhq_aligner import FFHQAligner
+from src.keypoint_alignment.converters.face.kps_28_to_4 import FaceKeypoint28To4Mapper
 from src.keypoint_alignment.converters.face.kps_68_to_4 import FaceKeypoint68To4Mapper
 from src.utils.path_utils import iterate_recursively
 
-
+kps_resolver = {68: FaceKeypoint68To4Mapper(), 28: FaceKeypoint28To4Mapper()}
 class FaceDumper:
     def __init__(self, object_detector, pose_config, pose_ckpt, output_size=256, device='cpu'):
         self.detector = MMPoseDetector(pose_config, pose_ckpt, object_detector, device=device,
                                        visualize=False)
 
-        self.pts_converter = FaceKeypoint68To4Mapper()
         self.aligner = FFHQAligner(output_size=output_size, transform_size=output_size * 4)
         self.bbox_threshold = output_size / 2
         self.kps_threshold = 0.1
@@ -41,7 +41,8 @@ class FaceDumper:
                 probs = pose['kps_probs']
                 face_kps = kps['face']
 
-                four_point = self.pts_converter.convert_points(face_kps)
+                pts_converter = kps_resolver[len(face_kps)]
+                four_point = pts_converter.convert_points(face_kps)
 
                 out_img = self.aligner.align(img, four_point)
                 out_img = cv2.cvtColor(out_img, cv2.COLOR_RGB2BGR)
