@@ -1,5 +1,10 @@
 # Found by `https://github.com/hysts/anime-face-detector`
-pose_config: ckpt/topdown_heatmap_hrnetv2_w18_300w_256x256.py
-pose_ckpt: ckpt/hrnetv2_w18_300w_256x256-eea53406_20211019.pth
+pose_config: ckpt/hrnetv2.py
+pose_ckpt: ckpt/mmpose_anime-face_hrnetv2.pth
+
+det_config: ckpt/faster-rcnn.py
+det_checkpoint: ckpt/mmdet_anime-face_faster-rcnn.pth
 
 kps: 28
+
+output_size: 512

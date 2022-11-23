@@ -4,8 +4,9 @@ import scipy.ndimage
 
 
 class FFHQAligner:
-    def __init__(self, output_size=1024, transform_size=4096, enable_padding=True, x_scale=1, y_scale=1, em_scale=0.1):
+    def __init__(self, output_size=1024, transform_size=4096, enable_padding=True, x_scale=1, y_scale=1, em_scale=0.1, blur_padding=False):
 
+        self.blur_padding = blur_padding
         self.output_size = output_size
         self.transform_size = transform_size
         self.enable_padding = enable_padding
@@ -66,13 +67,14 @@ class FFHQAligner:
         if self.enable_padding and max(pad) > border - 4:
             pad = np.maximum(pad, int(np.rint(qsize * 0.3)))
             img = np.pad(np.float32(img), ((pad[1], pad[3]), (pad[0], pad[2]), (0, 0)), 'reflect')
-            h, w, _ = img.shape
-            y, x, _ = np.ogrid[:h, :w, :1]
-            mask = np.maximum(1.0 - np.minimum(np.float32(x) / pad[0], np.float32(w - 1 - x) / pad[2]),
-                              1.0 - np.minimum(np.float32(y) / pad[1], np.float32(h - 1 - y) / pad[3]))
-            blur = qsize * 0.02
-            img += (scipy.ndimage.gaussian_filter(img, [blur, blur, 0]) - img) * np.clip(mask * 3.0 + 1.0, 0.0, 1.0)
-            img += (np.median(img, axis=(0, 1)) - img) * np.clip(mask, 0.0, 1.0)
+            if self.blur_padding:
+                h, w, _ = img.shape
+                y, x, _ = np.ogrid[:h, :w, :1]
+                mask = np.maximum(1.0 - np.minimum(np.float32(x) / pad[0], np.float32(w - 1 - x) / pad[2]),
+                                  1.0 - np.minimum(np.float32(y) / pad[1], np.float32(h - 1 - y) / pad[3]))
+                blur = qsize * 0.02
+                img += (scipy.ndimage.gaussian_filter(img, [blur, blur, 0]) - img) * np.clip(mask * 3.0 + 1.0, 0.0, 1.0)
+                img += (np.median(img, axis=(0, 1)) - img) * np.clip(mask, 0.0, 1.0)
             img = np.uint8(np.clip(np.rint(img), 0, 255))
 
             img = PIL.Image.fromarray(img, 'RGB')

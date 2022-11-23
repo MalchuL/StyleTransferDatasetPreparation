@@ -12,11 +12,11 @@ from src.utils.path_utils import iterate_recursively
 
 kps_resolver = {68: FaceKeypoint68To4Mapper(), 28: FaceKeypoint28To4Mapper()}
 class FaceDumper:
-    def __init__(self, object_detector, pose_config, pose_ckpt, output_size=256, device='cpu'):
+    def __init__(self, object_detector, pose_config, pose_ckpt, output_size=256, blur_padding=False, device='cpu'):
         self.detector = MMPoseDetector(pose_config, pose_ckpt, object_detector, device=device,
                                        visualize=False)
 
-        self.aligner = FFHQAligner(output_size=output_size, transform_size=output_size * 4)
+        self.aligner = FFHQAligner(output_size=output_size, transform_size=output_size * 4, blur_padding=blur_padding)
         self.bbox_threshold = output_size / 2
         self.kps_threshold = 0.1
 

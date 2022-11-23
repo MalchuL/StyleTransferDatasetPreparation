@@ -13,7 +13,8 @@ def is_image_file(filename):
 def iterate_with_structure(in_folder, out_folder, supported_extensions=IMG_EXTENSIONS):
     in_folder = Path(in_folder)
     out_folder = Path(out_folder)
-    out_folder.mkdir(exist_ok=True)
+    if not os.path.exists(out_folder):
+        os.makedirs(out_folder, exist_ok=True)
     files = []
     for pattern in supported_extensions:
         files.extend(in_folder.rglob(pattern='*' + pattern))
