@@ -1,4 +1,5 @@
 # Copyright (c) OpenMMLab. All rights reserved.
+import os.path
 import sys
 from argparse import ArgumentParser
 from pathlib import Path
@@ -48,6 +49,9 @@ def main():
 
 
     args = parser.parse_args()
+
+    if not os.path.exists(args.out_img_root):
+        os.makedirs(args.out_img_root, exist_ok=True)
     dumps_arguments(Path(args.out_img_root))
     if args.det_config is None:
         if args.dlib_det:
