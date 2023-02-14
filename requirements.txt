@@ -1,4 +1,5 @@
 opencv-python==4.5.5.64
 face-recognition==1.3.0
+scenedetect
 # ------ tests ----------#
 pytest
