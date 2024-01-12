@@ -27,3 +27,7 @@ persons is conducted in the part-based framework. You  can read about this in ht
    10. download by `mim download mmdet --config faster_rcnn_r50_fpn_1x_coco --dest ckpt/`
    11. And download by `mim download mmpose --config topdown_heatmap_hrnetv2_w18_300w_256x256  --dest ckpt/` to use only face model
    11. Finaly Run `python vis_demo_top_down.py ckpt/faster_rcnn_r50_fpn_1x_coco.py ckpt/faster_rcnn_r50_fpn_1x_coco_20200130-047c8118.pth ckpt/topdown_heatmap_hrnet_w48_coco_wholebody_384x288_dark_plus.py  ckpt/hrnet_w48_coco_wholebody_384x288_dark-f5726563_20200918.pth  --img-root demo --img arcane.jpg  --show`
+
+Third party
+1. Download repo with models to remove artifacts from https://huggingface.co/spaces/danielsapit/JPEG_Artifacts_Removal (if blocked then https://github.com/jiaxi-jiang/FBCNN) into `src/third_party/JPEG_Artifacts_Removal`
+2. Download models to upsample from https://github.com/xinntao/ESRGAN into `src/third_party/ESRGAN`
